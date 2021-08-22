@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect, session
 
 app = Flask(__name__)
-app.secret_key = "b'\xb6\xffE\\\x9eg5*nL\xaf\xf8j*q"
+app.secret_key = "ItsASecret"
 
 
 @app.route('/')
 def index():
-    session['visits'] = session['visits'] + 1
+    if 'visits' in session:
+        session['visits'] = session['visits'] + 1
+    else:
+        session['visits'] = 1
     return render_template("index.html")
 
 
@@ -17,7 +20,7 @@ def count():
 
 @app.route('/clear', methods=['POST'])
 def clear():
-    session['visits'] = 0
+    session.pop('visits')
 
     return redirect('/')
 
